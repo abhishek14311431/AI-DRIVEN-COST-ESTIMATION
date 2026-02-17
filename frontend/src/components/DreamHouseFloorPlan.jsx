@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Home, Building, Sparkles, Building2, User, Users, Bed, Accessibility } from 'lucide-react';
+import { ArrowLeft, Home, Building, Sparkles, Building2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function DreamHouseFloorPlan({ onBack, selectedData, onNext }) {
