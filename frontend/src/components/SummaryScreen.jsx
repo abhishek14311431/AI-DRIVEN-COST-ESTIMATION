@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle, Sparkles, Home, Box, Layers, Zap, PenTool } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Sparkles, Calculator, Award, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SummaryScreen({ onBack, selectedData, onProceed }) {
@@ -136,15 +136,14 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                         <div className="space-y-8">
                             <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
                                 <h3 className="text-sm font-black text-yellow-400 uppercase tracking-[0.3em] mb-8 opacity-60 flex items-center gap-2">
-                                    <Home className="w-4 h-4" />
                                     Project Fundamentals
                                 </h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {[
-                                        { label: 'Project Name', value: formatValue(selectedData?.projectType), icon: Home },
-                                        { label: 'Plot Size', value: formatValue(selectedData?.plotSize), icon: Box },
-                                        { label: 'Total Floors', value: formatValue(selectedData?.floors), icon: Layers },
-                                        { label: 'Area Details', value: `${selectedData?.dimensions || selectedData?.plotSize || ''} FT`, icon: Sparkles }
+                                        { label: 'Project Name', value: formatValue(selectedData?.projectType) },
+                                        { label: 'Plot Size', value: formatValue(selectedData?.plotSize) },
+                                        { label: 'Total Floors', value: formatValue(selectedData?.floors) },
+                                        { label: 'Area Details', value: `${selectedData?.dimensions || selectedData?.plotSize || ''} FT` }
                                     ].map((item, i) => (
                                         <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-2">
                                             <span className="text-[10px] text-white/30 uppercase tracking-widest font-black leading-none">{item.label}</span>
@@ -156,7 +155,6 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
 
                             <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
                                 <h3 className="text-sm font-black text-blue-400 uppercase tracking-[0.3em] mb-8 opacity-60 flex items-center gap-2">
-                                    <Zap className="w-4 h-4" />
                                     Execution Specs
                                 </h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -174,7 +172,6 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                             {currentInterior && (
                                 <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-purple-500/5 border border-purple-500/20 backdrop-blur-xl">
                                     <h3 className="text-sm font-black text-purple-400 uppercase tracking-[0.3em] mb-6 opacity-60 flex items-center gap-2">
-                                        <PenTool className="w-4 h-4" />
                                         Interior Specification
                                     </h3>
                                     <div className="space-y-3">
