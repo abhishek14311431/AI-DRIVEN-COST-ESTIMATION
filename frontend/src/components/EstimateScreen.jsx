@@ -173,7 +173,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
     }, [analyzing, isReadOnly, selectedData?.signature]);
 
     const handleSaveProject = async () => {
-        setGenerating(true);
+
         try {
             const canvas = canvasRef.current;
             const signatureImage = signature ? canvas.toDataURL('image/png') : null;
@@ -219,10 +219,10 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                     if (onHome) onHome();
                 }, 5000);
             }
-            setGenerating(false);
+
         } catch (err) {
             console.error("Save Error:", err);
-            setGenerating(false);
+
         }
     };
 
