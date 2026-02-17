@@ -180,10 +180,30 @@ export default function SavedFilesScreen({ onBack, onViewProject }) {
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-bold focus:outline-none"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveRename(e);
+                        if (e.key === 'Escape') setRenamingId(null);
+                      }}
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-bold focus:outline-none focus:border-white/30"
                     />
-                    <button onClick={saveRename} className="p-2 rounded-lg bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500 hover:text-white">
+                    <button
+                      onClick={saveRename}
+                      className="p-2 rounded-lg bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500 hover:text-white transition-all"
+                      title="Save"
+                    >
                       <CheckCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRenamingId(null);
+                      }}
+                      className="p-2 rounded-lg bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500 hover:text-white transition-all"
+                      title="Cancel"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
                     </button>
                   </div>
                 ) : (
