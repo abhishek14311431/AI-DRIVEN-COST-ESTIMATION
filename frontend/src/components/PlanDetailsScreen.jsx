@@ -131,7 +131,7 @@ export default function PlanDetailsScreen({ onBack, selectedData, onProceed }) {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/80 to-black/90 fixed" />
 
-      <div className="relative z-10 w-full max-w-[64%] mx-auto pb-10">
+      <div className="relative z-10 w-full max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

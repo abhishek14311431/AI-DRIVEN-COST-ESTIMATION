@@ -145,7 +145,7 @@ export default function FloorPlanScreen({ onBack, selectedData, onNext }) {
       />
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-[70%] mx-auto">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Back Button */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

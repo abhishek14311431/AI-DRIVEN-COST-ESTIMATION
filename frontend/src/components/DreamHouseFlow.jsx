@@ -156,7 +156,7 @@ export default function DreamHouseFlow({
                 <div className="w-32"></div>
             </motion.div>
 
-            <div className="max-w-[64%] mx-auto">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
