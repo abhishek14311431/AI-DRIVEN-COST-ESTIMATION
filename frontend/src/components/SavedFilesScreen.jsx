@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, FileText, Calendar, DollarSign, FolderOpen, Clock, MoreVertical, Edit2, Trash2, Download, Eye, CheckCircle } from 'lucide-react';
+import { ArrowLeft, FolderOpen, Clock, MoreVertical, Edit2, Trash2, Download, Eye, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../services/api';
 
