@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle, Sparkles, Calculator, Award, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Sparkles, Home, Box, Layers, Zap, PenTool } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SummaryScreen({ onBack, selectedData, onProceed }) {
