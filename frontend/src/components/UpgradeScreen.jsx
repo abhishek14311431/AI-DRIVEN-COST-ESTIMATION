@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Star, CheckCircle, TrendingUp, Home, Building, Sparkles, Building2, Shield, Zap, Droplets, Grid, BadgeCheck } from 'lucide-react';
+import { ArrowLeft, Star, CheckCircle, Shield, Zap, Droplets, Grid, BadgeCheck } from 'lucide-react';
 import { useState } from 'react';
 
 export default function UpgradeScreen({ onBack, selectedData, onProceed }) {
@@ -81,7 +81,6 @@ export default function UpgradeScreen({ onBack, selectedData, onProceed }) {
     }
   };
 
-  const currentPlan = tierDetails[selectedData?.plan] || tierDetails.base;
   const currentDefaults = getDefaultsForPlan(selectedData?.plan);
 
 

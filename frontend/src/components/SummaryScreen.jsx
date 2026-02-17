@@ -1,11 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CheckCircle, ClipboardList, Home, Layers, Zap, PenTool, CheckSquare, Square, Box, Sparkles, Layout, Armchair, Sofa } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Home, Layers, Zap, PenTool, Box, Sparkles, Layout } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SummaryScreen({ onBack, selectedData, onProceed }) {
     const [compoundWall, setCompoundWall] = useState(selectedData?.additionalRequirements?.compoundWall || selectedData?.compoundWall || false);
     const [rainWater, setRainWater] = useState(selectedData?.additionalRequirements?.rainWater || selectedData?.rainWater || false);
-    const [additionalNotes, setAdditionalNotes] = useState(selectedData?.additionalRequirements?.notes || '');
+    const additionalNotes = selectedData?.additionalRequirements?.notes || '';
 
     const formatValue = (str) => {
         if (str === null || str === undefined) return '';

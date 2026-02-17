@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Eye, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function AdditionalQuestionsScreen({ onBack, selectedData, onComplete }) {

@@ -1,5 +1,5 @@
 import { motion, animate } from 'framer-motion';
-import { ArrowLeft, TrendingUp, Calculator, Home, DollarSign, Sparkles, CheckCircle2, Award, Zap, Shield, Loader2, PenTool, Save, Download, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Calculator, Home, Sparkles, CheckCircle2, Zap, Shield, Loader2, PenTool, Save, CheckCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '../services/api';
 
