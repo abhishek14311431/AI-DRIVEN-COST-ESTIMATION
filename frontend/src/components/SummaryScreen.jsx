@@ -244,18 +244,24 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {/* Compound Wall Toggle */}
-                                        <div className="flex flex-col gap-4 p-5 rounded-2xl bg-white/5 border border-white/5">
-                                            <span className="text-sm text-white/40 font-black uppercase tracking-[0.2em]">Compound Wall Option</span>
-                                            <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 w-full">
+                                        <div className="flex flex-col gap-3 p-5 rounded-2xl bg-white/5 border border-white/10">
+                                            <span className="text-xs text-white/60 font-bold uppercase tracking-wider">Compound Wall Option</span>
+                                            <div className="flex gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
                                                 <button
                                                     onClick={() => setCompoundWall(true)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${compoundWall ? 'bg-indigo-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${compoundWall
+                                                            ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/50 scale-105'
+                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        }`}
                                                 >
                                                     YES
                                                 </button>
                                                 <button
                                                     onClick={() => setCompoundWall(false)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${!compoundWall ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${!compoundWall
+                                                            ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
+                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        }`}
                                                 >
                                                     NO
                                                 </button>
@@ -263,18 +269,24 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                         </div>
 
                                         {/* Rain Water Harvesting Toggle */}
-                                        <div className="flex flex-col gap-4 p-5 rounded-2xl bg-white/5 border border-white/5">
-                                            <span className="text-sm text-white/40 font-black uppercase tracking-[0.2em]">Rain Harvesting Option</span>
-                                            <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 w-full">
+                                        <div className="flex flex-col gap-3 p-5 rounded-2xl bg-white/5 border border-white/10">
+                                            <span className="text-xs text-white/60 font-bold uppercase tracking-wider">Rain Harvesting Option</span>
+                                            <div className="flex gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
                                                 <button
                                                     onClick={() => setRainWater(true)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${rainWater ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${rainWater
+                                                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/50 scale-105'
+                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        }`}
                                                 >
                                                     YES
                                                 </button>
                                                 <button
                                                     onClick={() => setRainWater(false)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${!rainWater ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${!rainWater
+                                                            ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
+                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        }`}
                                                 >
                                                     NO
                                                 </button>
