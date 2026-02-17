@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle, Download, Sparkles, Shield, Zap, Layout, Calculator, Layers, Target, Info, Award, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Sparkles, Calculator, Target, Info, Award, Loader2 } from 'lucide-react';
 
 export default function SelectedTierDetail({ onBack, tier, estimateData, selectedData, onProceed }) {
     const [processing, setProcessing] = useState(false);
