@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle, Sparkles, Home, Box, Layers, Zap, PenTool } fro
 import { useState } from 'react';
 
 export default function SummaryScreen({ onBack, selectedData, onProceed }) {
+    // detailed summary screen logic
     const [compoundWall, setCompoundWall] = useState(selectedData?.additionalRequirements?.compoundWall || selectedData?.compoundWall || false);
     const [rainWater, setRainWater] = useState(selectedData?.additionalRequirements?.rainWater || selectedData?.rainWater || false);
     const additionalNotes = selectedData?.additionalRequirements?.notes || '';
