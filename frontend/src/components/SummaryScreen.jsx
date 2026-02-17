@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CheckCircle, Home, Layers, Zap, PenTool, Box, Sparkles, Layout } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Home, Layers, Zap, PenTool, Box, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SummaryScreen({ onBack, selectedData, onProceed }) {
@@ -251,13 +251,13 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                             <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 w-full">
                                                 <button
                                                     onClick={() => setCompoundWall(true)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${compoundWall ? 'bg-indigo-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex - 1 py - 4 rounded - lg text - base font - black tracking - widest transition - all ${compoundWall ? 'bg-indigo-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'} `}
                                                 >
                                                     YES
                                                 </button>
                                                 <button
                                                     onClick={() => setCompoundWall(false)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${!compoundWall ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex - 1 py - 4 rounded - lg text - base font - black tracking - widest transition - all ${!compoundWall ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'} `}
                                                 >
                                                     NO
                                                 </button>
@@ -270,13 +270,13 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                             <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 w-full">
                                                 <button
                                                     onClick={() => setRainWater(true)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${rainWater ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex - 1 py - 4 rounded - lg text - base font - black tracking - widest transition - all ${rainWater ? 'bg-emerald-500 text-white shadow-lg' : 'text-white/20 hover:text-white/40'} `}
                                                 >
                                                     YES
                                                 </button>
                                                 <button
                                                     onClick={() => setRainWater(false)}
-                                                    className={`flex-1 py-4 rounded-lg text-base font-black tracking-widest transition-all ${!rainWater ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'}`}
+                                                    className={`flex - 1 py - 4 rounded - lg text - base font - black tracking - widest transition - all ${!rainWater ? 'bg-white/10 text-white' : 'text-white/20 hover:text-white/40'} `}
                                                 >
                                                     NO
                                                 </button>

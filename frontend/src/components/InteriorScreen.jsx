@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CheckCircle, Home, Armchair, Sparkles, Box, Layout } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Home, Armchair, Sofa, Sparkles, Box, Layout } from 'lucide-react';
 import { useState } from 'react';
 
 export default function InteriorScreen({ onBack, selectedData, onProceed }) {
