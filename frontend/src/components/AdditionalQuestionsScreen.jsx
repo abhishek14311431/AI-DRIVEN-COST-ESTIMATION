@@ -111,7 +111,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
       />
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-[70%] mx-auto pb-10">
+      <div className="relative z-10 w-full max-w-5xl mx-auto pb-8">
         {/* Header with Back Button */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -122,7 +122,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
             onClick={handleBack}
             whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 px-6 py-3 rounded-xl text-white font-semibold transition-all"
+            className="flex items-center gap-3 px-4 py-2 rounded-xl text-white font-semibold transition-all"
             style={{
               background: 'rgba(255, 255, 255, 0.1)',
               backdropFilter: 'blur(20px)',
@@ -136,7 +136,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
           </motion.button>
 
           <h1
-            className="text-5xl font-bold text-white text-center"
+            className="text-4xl font-bold text-white text-center"
             style={{
               fontFamily: "'Montserrat', sans-serif",
               textShadow: '0 0 30px rgba(255, 215, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.8)',
@@ -152,7 +152,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="p-10 md:p-16 rounded-[4rem] overflow-hidden"
+          className="p-8 md:p-10 rounded-[2.5rem] overflow-hidden"
           style={{
             background: 'rgba(0, 0, 0, 0.1)',
             backdropFilter: 'blur(20px)',
@@ -166,15 +166,15 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-1 bg-black/20 rounded-2xl border border-white/5">
               <div className="p-4 rounded-xl hover:bg-white/5 transition-colors text-center md:text-left">
                 <p className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1">Project</p>
-                <p className="text-lg font-bold text-white tracking-wide">{selectedData?.projectType === 'dream-house' ? 'Dream House' : 'Rental'}</p>
+                <p className="text-base font-bold text-white tracking-wide">{selectedData?.projectType === 'dream-house' ? 'Dream House' : 'Rental'}</p>
               </div>
               <div className="p-4 rounded-xl hover:bg-white/5 transition-colors text-center md:text-left">
                 <p className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1">Plot Size</p>
-                <p className="text-lg font-bold text-white tracking-wide capitalize">{selectedData?.plotSize?.replace('-', ' ')}</p>
+                <p className="text-base font-bold text-white tracking-wide capitalize">{selectedData?.plotSize?.replace('-', ' ')}</p>
               </div>
               <div className="p-4 rounded-xl hover:bg-white/5 transition-colors text-center md:text-left">
                 <p className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1">Dimensions</p>
-                <p className="text-lg font-bold text-white tracking-wide">{selectedData?.dimensions}</p>
+                <p className="text-base font-bold text-white tracking-wide">{selectedData?.dimensions}</p>
               </div>
             </div>
           </div>
@@ -249,7 +249,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
                   }}
                 >
                   <h2
-                    className="text-3xl font-bold text-white mb-6"
+                    className="text-xl font-bold text-white mb-4"
                     style={{
                       fontFamily: "'Montserrat', sans-serif",
                       textShadow: '0 2px 15px rgba(0, 0, 0, 0.8)',
@@ -270,7 +270,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleAnswer(question.id, option)}
-                            className={`px-8 py-4 rounded-xl text-white font-bold text-xl ${answers[question.id] === option ? 'ring-4 ring-yellow-400' : ''}`}
+                            className={`px-6 py-2 rounded-xl text-white font-bold text-base ${answers[question.id] === option ? 'ring-4 ring-yellow-400' : ''}`}
                             style={{
                               background: answers[question.id] === option
                                 ? 'rgba(255, 215, 0, 0.3)'
@@ -298,7 +298,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleAnswer(question.id, option)}
-                            className={`px-6 py-3 rounded-xl text-white font-bold text-xl ${answers[question.id] === option ? 'ring-4 ring-yellow-400' : ''}`}
+                            className={`px-5 py-2 rounded-xl text-white font-bold text-base ${answers[question.id] === option ? 'ring-4 ring-yellow-400' : ''}`}
                             style={{
                               background: answers[question.id] === option
                                 ? 'rgba(255, 215, 0, 0.3)'
@@ -343,7 +343,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
                         placeholder="Enter value"
                         value={answers[question.id] || ''}
                         onChange={(e) => handleAnswer(question.id, e.target.value)}
-                        className="w-full px-6 py-3 rounded-xl text-white text-center text-lg font-semibold"
+                        className="w-full px-4 py-2 rounded-xl text-white text-center text-base font-semibold"
                         style={{
                           background: 'rgba(255, 255, 255, 0.1)',
                           backdropFilter: 'blur(15px)',
@@ -371,7 +371,7 @@ export default function AdditionalQuestionsScreen({ onBack, selectedData, onComp
               whileTap={{ scale: 0.95 }}
               onClick={handleSubmit}
               disabled={!allAnswered}
-              className={`px-12 py-4 rounded-xl text-white font-semibold text-xl ${allAnswered ? '' : 'opacity-50 cursor-not-allowed'}`}
+              className={`px-8 py-3 rounded-xl text-white font-semibold text-lg ${allAnswered ? '' : 'opacity-50 cursor-not-allowed'}`}
               style={{
                 background: allAnswered
                   ? 'rgba(255, 215, 0, 0.8)'
