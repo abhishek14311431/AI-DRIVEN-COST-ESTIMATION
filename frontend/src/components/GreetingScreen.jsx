@@ -193,23 +193,6 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
 
         </div>
 
-        {/* Footer Status */}
-        <motion.div
-          variants={itemVariants}
-          className="absolute bottom-10 right-12 hidden md:flex items-center gap-4"
-        >
-          <div className="flex gap-1" >
-            {[1, 2, 3].map(i => (
-              <motion.div
-                key={i}
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                className="w-1 h-1 bg-amber-500 rounded-full"
-              />
-            ))}
-          </div>
-          <span className="text-xs text-amber-500/50 font-mono">SYSTEM ONLINE</span>
-        </motion.div>
 
       </motion.div>
     </div>
