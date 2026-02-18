@@ -90,31 +90,28 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
         {/* Top Bar / Brand */}
         <motion.div
           variants={itemVariants}
-          className="absolute top-10 left-8 md:left-12 flex items-center gap-6 group"
+          className="flex items-center gap-6 mb-24 group"
         >
           <div className="relative w-14 h-14 flex items-center justify-center">
             <div className="absolute inset-0 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 group-hover:border-amber-500/30 transition-all duration-500" />
             <svg className="w-10 h-10 relative z-10" viewBox="0 0 100 100">
-              <g fill="white" transform="translate(10, 15) scale(0.8)">
-                <path d="M0 0 h24 v12 h-10 v44 h20 v12 h-34 v-12 h10 v-44 h-10 z" />
-                <path d="M30 68 h12 l5 -15 h26 l5 15 h14 l-26 -68 h-18 l-18 68 z M49 41 l9 -30 l9 30 h-18 z" />
-              </g>
+              <path d="M25 20 v60 h20 M45 80 l15-60 15 60 M50 60 h20" fill="none" stroke="white" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-white font-black text-sm uppercase tracking-[0.4em] leading-none mb-1">Architecture</span>
-            <span className="text-white/40 font-bold text-[9px] uppercase tracking-[0.3em]">Cost Intelligence System</span>
+            <span className="text-white font-black text-sm uppercase tracking-[0.4em] leading-none mb-1 text-shadow">Architecture</span>
+            <span className="text-amber-500/80 font-bold text-[9px] uppercase tracking-[0.3em]">Cost Intelligence System</span>
           </div>
         </motion.div>
 
 
-        <div className="flex flex-col md:flex-row items-end md:items-center justify-between gap-16 mt-20 md:mt-0">
+        <div className="flex flex-col md:flex-row items-end md:items-center justify-between gap-16">
 
           {/* Left Column: Typography Greeting */}
           <div className="flex-1 text-left">
-            <motion.div variants={itemVariants} className="overflow-hidden mb-4">
-              <span className="text-amber-500 text-xs font-black uppercase tracking-[0.5em] block mb-2">Systems Online // 2026 Audit Active</span>
-              <h2 className="text-4xl md:text-5xl font-light text-white/90 font-serif leading-tight">
+            <motion.div variants={itemVariants} className="overflow-hidden mb-6">
+              <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.6em] block mb-4 border-l-2 border-amber-500 pl-4">System Online // v4.0.26</span>
+              <h2 className="text-3xl md:text-4xl font-light text-white/50 tracking-tight">
                 {(() => {
                   const hour = new Date().getHours();
                   if (hour < 12) return "Good Morning,";
@@ -124,30 +121,28 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
               </h2>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="relative mb-10">
-              {/* The Name - Elegant & Sophisticated */}
+            <motion.div variants={itemVariants} className="relative mb-12">
               <h1
-                className="text-[4rem] md:text-[7rem] font-black text-white leading-[0.8] tracking-tighter"
+                className="text-[5rem] md:text-[9.5rem] font-black text-white leading-[0.85] tracking-tighter"
                 style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  textShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
+                  fontFamily: "'Orbitron', sans-serif",
+                  textShadow: '0 10px 40px rgba(0, 0, 0, 0.8), 0 0 100px rgba(255,255,255,0.05)'
                 }}
               >
                 {userName.toUpperCase()}
               </h1>
 
-              {/* Decorative accent */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: 120 }}
-                transition={{ delay: 1.5, duration: 1 }}
-                className="h-1 bg-gradient-to-r from-amber-500 to-transparent mt-6"
+                animate={{ width: '100%', maxWidth: '400px' }}
+                transition={{ duration: 1.5, ease: "circOut" }}
+                className="h-[2px] bg-gradient-to-r from-amber-500 via-amber-500/50 to-transparent mt-8"
               />
             </motion.div>
 
-            <motion.p variants={itemVariants} className="mt-8 text-white/50 text-base md:text-lg max-w-md leading-relaxed border-l border-white/20 pl-6 uppercase tracking-widest font-medium">
-              Intelligence system ready. <br />
-              <span className="text-white/80">Architectural analysis for the next generation of living.</span>
+            <motion.p variants={itemVariants} className="text-white/40 text-sm md:text-base max-w-sm leading-relaxed uppercase tracking-[0.2em] font-medium">
+              Precision Audit Engine <br />
+              <span className="text-white/80 font-black">Architecting Future Investments.</span>
             </motion.p>
           </div>
 

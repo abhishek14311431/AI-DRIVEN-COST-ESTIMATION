@@ -166,10 +166,7 @@ export default function SavedFilesScreen({ onBack, onViewProject }) {
                 <div className="flex justify-between items-start mb-6">
                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getGradient(project.project_type)} shadow-lg flex items-center justify-center p-2`}>
                     <svg className="w-full h-full" viewBox="0 0 100 100">
-                      <g fill="white" transform="translate(10, 15) scale(0.8)">
-                        <path d="M0 0 h24 v12 h-10 v44 h20 v12 h-34 v-12 h10 v-44 h-10 z" />
-                        <path d="M30 68 h12 l5 -15 h26 l5 15 h14 l-26 -68 h-18 l-18 68 z M49 41 l9 -30 l9 30 h-18 z" />
-                      </g>
+                      <path d="M25 20 v60 h20 M45 80 l15-60 15 60 M50 60 h20" fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                   <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-white/60 font-black tracking-[0.2em] uppercase">

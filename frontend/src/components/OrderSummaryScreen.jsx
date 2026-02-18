@@ -152,10 +152,7 @@ export default function OrderSummaryScreen({ onBack, onSave, estimateData, selec
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center gap-4">
                                 <svg className="w-8 h-8" viewBox="0 0 100 100">
-                                    <g fill="white" transform="translate(10, 15) scale(0.8)">
-                                        <path d="M0 0 h24 v12 h-10 v44 h20 v12 h-34 v-12 h10 v-44 h-10 z" />
-                                        <path d="M30 68 h12 l5 -15 h26 l5 15 h14 l-26 -68 h-18 l-18 68 z M49 41 l9 -30 l9 30 h-18 z" />
-                                    </g>
+                                    <path d="M25 20 v60 h20 M45 80 l15-60 15 60 M50 60 h20" fill="none" stroke="white" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 <h1 className="text-4xl font-black text-white uppercase tracking-tighter leading-none">Project Agreement</h1>
                             </div>
