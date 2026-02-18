@@ -205,38 +205,36 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                 </motion.div>
                             )}
 
-                            <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
-                                {(() => {
-                                    const planDefaults = {
-                                        base: { flooring: 'ceramic', walls: 'basic', electrical: 'basic', plumbing: 'basic', security: 'basic' },
-                                        classic: { flooring: 'granite', walls: 'emulsion', electrical: 'branded', plumbing: 'branded', security: 'basic' },
-                                        premium: { flooring: 'marble', walls: 'texture', electrical: 'branded', plumbing: 'branded', security: 'advanced' },
-                                        luxury: { flooring: 'italian-marble', walls: 'texture', electrical: 'smart', plumbing: 'luxury', security: 'premium' }
-                                    };
-                                    const plan = selectedData?.plan?.toLowerCase() || 'base';
-                                    const defaults = planDefaults[plan] || planDefaults.base;
-                                    const activeUpgrades = Object.entries(selectedData?.upgrades || {}).filter(([category, value]) => {
-                                        return value && value !== defaults[category];
-                                    });
+                            {(() => {
+                                const planDefaults = {
+                                    base: { flooring: 'ceramic', walls: 'basic', electrical: 'basic', plumbing: 'basic', security: 'basic' },
+                                    classic: { flooring: 'granite', walls: 'emulsion', electrical: 'branded', plumbing: 'branded', security: 'basic' },
+                                    premium: { flooring: 'marble', walls: 'texture', electrical: 'branded', plumbing: 'branded', security: 'advanced' },
+                                    luxury: { flooring: 'italian-marble', walls: 'texture', electrical: 'smart', plumbing: 'luxury', security: 'premium' }
+                                };
+                                const plan = selectedData?.plan?.toLowerCase() || 'base';
+                                const defaults = planDefaults[plan] || planDefaults.base;
+                                const activeUpgrades = Object.entries(selectedData?.upgrades || {}).filter(([category, value]) => {
+                                    return value && value !== defaults[category];
+                                });
 
-                                    return activeUpgrades.length > 0 ? (
-                                        <>
-                                            <h3 className="text-sm font-black text-orange-400 uppercase tracking-[0.3em] mb-8 opacity-60 flex items-center gap-2">
-                                                <Sparkles className="w-4 h-4" />
-                                                Premium Upgrades ({activeUpgrades.length})
-                                            </h3>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                {activeUpgrades.map(([category, value]) => (
-                                                    <div key={category} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-2">
-                                                        <span className="text-[10px] text-white/30 uppercase tracking-widest font-black leading-none">{formatValue(category)}</span>
-                                                        <span className="text-lg font-bold text-white uppercase">{formatValue(value)}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : null;
-                                })()}
-                            </motion.div>
+                                return activeUpgrades.length > 0 ? (
+                                    <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+                                        <h3 className="text-sm font-black text-orange-400 uppercase tracking-[0.3em] mb-8 opacity-60 flex items-center gap-2">
+                                            <Sparkles className="w-4 h-4" />
+                                            Premium Upgrades ({activeUpgrades.length})
+                                        </h3>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {activeUpgrades.map(([category, value]) => (
+                                                <div key={category} className="p-5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-2">
+                                                    <span className="text-[10px] text-white/30 uppercase tracking-widest font-black leading-none">{formatValue(category)}</span>
+                                                    <span className="text-lg font-bold text-white uppercase">{formatValue(value)}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                ) : null;
+                            })()}
 
                             <motion.div variants={itemVariants} className="p-8 rounded-[2.5rem] bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 backdrop-blur-xl">
                                 <div className="mb-8">
@@ -250,8 +248,8 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                                 <button
                                                     onClick={() => setCompoundWall(true)}
                                                     className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${compoundWall
-                                                            ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/50 scale-105'
-                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/50 scale-105'
+                                                        : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
                                                         }`}
                                                 >
                                                     YES
@@ -259,8 +257,8 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                                 <button
                                                     onClick={() => setCompoundWall(false)}
                                                     className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${!compoundWall
-                                                            ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
-                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
+                                                        : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
                                                         }`}
                                                 >
                                                     NO
@@ -275,8 +273,8 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                                 <button
                                                     onClick={() => setRainWater(true)}
                                                     className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${rainWater
-                                                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/50 scale-105'
-                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/50 scale-105'
+                                                        : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
                                                         }`}
                                                 >
                                                     YES
@@ -284,8 +282,8 @@ export default function SummaryScreen({ onBack, selectedData, onProceed }) {
                                                 <button
                                                     onClick={() => setRainWater(false)}
                                                     className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold tracking-wide transition-all duration-200 ${!rainWater
-                                                            ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
-                                                            : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
+                                                        ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg shadow-gray-600/50 scale-105'
+                                                        : 'bg-transparent text-white/30 hover:text-white/50 hover:bg-white/5'
                                                         }`}
                                                 >
                                                     NO
