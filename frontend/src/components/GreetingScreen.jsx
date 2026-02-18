@@ -79,9 +79,25 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
       />
 
 
+      {/* Top Bar / Toolbar */}
+      <motion.div
+        variants={itemVariants}
+        className="absolute top-0 left-0 w-full h-24 z-30 px-8 md:px-12 flex items-center justify-between"
+      >
+        <div className="flex items-center gap-4 group">
+          <div className="w-12 h-12 flex items-center justify-center bg-black rounded-lg border border-white/20 shadow-2xl overflow-hidden">
+            <span className="text-white font-black text-2xl tracking-tighter" style={{ fontFamily: "'Montserrat', sans-serif" }}>LA</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-white font-black text-sm uppercase tracking-[0.4em] leading-none mb-1">Architecture</span>
+            <span className="text-amber-500 font-bold text-[9px] uppercase tracking-[0.3em]">Cost Intelligence System</span>
+          </div>
+        </div>
+      </motion.div>
+
       {/* Main Content Interface */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl px-8 md:px-12 flex flex-col justify-center h-full"
+        className="relative z-20 w-full max-w-7xl px-8 md:px-12 flex flex-col justify-center h-full pt-20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -92,24 +108,6 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
 
           {/* Left Column: Typography Greeting */}
           <div className="flex-1 text-left flex flex-col justify-center">
-            {/* Brand Section Integrated Above Greeting - Tighter Spacing */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center gap-4 mb-4 group"
-            >
-              <div className="w-12 h-12 flex items-center justify-center bg-black rounded-xl border border-white/20 shadow-2xl overflow-hidden p-1.5">
-                <svg className="w-full h-full" viewBox="0 0 100 100">
-                  <g fill="white" transform="translate(10, 15) scale(0.8)">
-                    <path d="M0 0 h24 v12 h-10 v44 h20 v12 h-34 v-12 h10 v-44 h-10 z" />
-                    <path d="M30 68 h12 l5 -15 h26 l5 15 h14 l-26 -68 h-18 l-18 68 z M49 41 l9 -30 l9 30 h-18 z" />
-                  </g>
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-white font-black text-sm uppercase tracking-[0.4em] leading-none mb-1">Architecture</span>
-                <span className="text-amber-500 font-bold text-[9px] uppercase tracking-[0.3em]">Cost Intelligence System</span>
-              </div>
-            </motion.div>
 
             <motion.div variants={itemVariants} className="overflow-hidden mb-6">
               <h2 className="text-3xl md:text-4xl font-light text-white/50 tracking-tight">
@@ -126,7 +124,7 @@ export default function GreetingScreen({ userName = "Abhishek", onYes, onNo }) {
               <h1
                 className="text-[5.5rem] md:text-[8.5rem] font-black text-white leading-[0.8] tracking-tighter"
                 style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: "'Outfit', sans-serif",
                   textShadow: '0 20px 50px rgba(0, 0, 0, 0.5)'
                 }}
               >

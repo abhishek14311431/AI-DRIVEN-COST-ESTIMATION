@@ -297,12 +297,9 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                         className="flex flex-col items-center gap-2"
                     >
                         <div className="flex items-center gap-4 mb-1">
-                            <svg className="w-8 h-8" viewBox="0 0 100 100">
-                                <g fill="white" transform="translate(10, 15) scale(0.8)">
-                                    <path d="M0 0 h24 v12 h-10 v44 h20 v12 h-34 v-12 h10 v-44 h-10 z" />
-                                    <path d="M30 68 h12 l5 -15 h26 l5 15 h14 l-26 -68 h-18 l-18 68 z M49 41 l9 -30 l9 30 h-18 z" />
-                                </g>
-                            </svg>
+                            <div className="w-10 h-10 flex items-center justify-center bg-black rounded-lg border border-white/20 shadow-lg overflow-hidden shrink-0">
+                                <span className="text-white font-black text-lg tracking-tighter" style={{ fontFamily: "'Montserrat', sans-serif" }}>LA</span>
+                            </div>
                             <h1 className="text-4xl md:text-5xl font-black text-white">Cost Intelligence</h1>
                         </div>
 
