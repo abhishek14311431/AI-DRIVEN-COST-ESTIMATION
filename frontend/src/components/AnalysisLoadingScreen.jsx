@@ -6,7 +6,7 @@ export default function AnalysisLoadingScreen({ tier, onComplete }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             onComplete();
-        }, 4000);
+        }, 1000); // Reduced from 4000ms
         return () => clearTimeout(timer);
     }, [onComplete]);
 
@@ -72,7 +72,7 @@ export default function AnalysisLoadingScreen({ tier, onComplete }) {
                 <motion.div
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
-                    transition={{ duration: 4, ease: "easeInOut" }}
+                    transition={{ duration: 1, ease: "easeInOut" }} // Reduced from 4s
                     className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
                 />
             </div>

@@ -50,17 +50,12 @@ def root():
 @app.post("/estimate")
 async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 	try:
-		print("\n" + "="*50)
-		print("[API] REQUEST RECEIVED")
-		print("="*50)
 		start_time = time.time()
 		payload = request.dict()
-		print(f"[PAYLOAD] RAW: {payload}")
 
 		project_type = payload["project_type"]
 		plot_size = payload["plot_size"]
 		if plot_size in ["full-site", "half-site", "double-site"] and payload.get("dimensions"):
-			print(f"[NORM] plot_size '{plot_size}' -> dimensions '{payload['dimensions']}'")
 			plot_size = payload["dimensions"]
 
 		floors_raw = payload["floors"]
@@ -71,7 +66,6 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 			if "g+" in floors_raw.lower():
 				try:
 					floors = int(floors_raw.lower().replace("g+", "")) + 1
-					print(f"[PARSE] floors '{floors_raw}' -> {floors}")
 				except:
 					floors = 1
 			else:
@@ -80,13 +74,10 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 				except:
 					floors = 1
 
-		zone = payload.get("zone", "Zone 1")
-		
 		selected_tier_raw = payload["selected_tier"]
 		selected_tier = selected_tier_raw.capitalize() if selected_tier_raw else "Basic"
 		if selected_tier == "Base":
 			selected_tier = "Basic"
-		print(f"[TIER] '{selected_tier_raw}' -> '{selected_tier}'")
 
 		site_type = payload.get("site_type", "full")
 		family_details = payload["family_details"]
@@ -95,10 +86,6 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 		upgrades = payload.get("upgrades", {})
 		interior = payload.get("interior", None)
 
-		print(f"[PROC] Processing '{project_type}' project...")
-
-		base_calc_start = time.time()
-		
 		engine_project_type = project_type
 		if project_type in ["dream-house", "own-house"]:
 			engine_project_type = "own_house"
@@ -111,8 +98,6 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 		elif project_type == "exteriors":
 			engine_project_type = "exterior"
 			
-		print(f"[ENGINE] Project Type: {engine_project_type}")
-
 		if engine_project_type == "rental":
 			base_result = RentalEngine(plot_size, floors, lift_required, site_type, family_details).calculate_rental_cost()
 		elif engine_project_type == "own_house":
@@ -126,7 +111,6 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 		elif engine_project_type == "exterior":
 			base_result = ExteriorEngine(plot_size, floors, site_type, family_details).calculate_exterior_cost()
 		else:
-			print(f"[WARN] Unknown project type '{project_type}', defaulting to own_house logic")
 			base_result = OwnHouseEngine(plot_size, floors, lift_required, site_type, family_details).calculate_ownhouse_cost()
 
 		if upgrades:
@@ -137,46 +121,26 @@ async def estimate(request: EstimateRequest) -> Dict[str, Any]:
 		base_result["compound_wall_required"] = payload.get("compound_wall", False)
 		base_result["rain_water_harvesting_required"] = payload.get("rain_water_harvesting", False)
 
-		base_calc_time = time.time() - base_calc_start
-		print(f"[TIME] Base calculation: {base_calc_time:.2f}s")
-
-		breakdown_start = time.time()
 		breakdown = BreakdownEngine(base_result, selected_tier).generate_final_breakdown()
-		breakdown_time = time.time() - breakdown_start
-		print(f"[TIME] Breakdown generation: {breakdown_time:.2f}s")
-
-		explanation_start = time.time()
 		explanation = XAIEngine(breakdown).generate_explanation()
-		explanation_time = time.time() - explanation_start
-		print(f"[TIME] AI explanation: {explanation_time:.2f}s")
-
 		breakdown["selected_tier"] = selected_tier
 
 		pdf_generated = False
 		if generate_pdf:
 			pdf_payload = breakdown.copy()
 			pdf_payload["explanation"] = explanation
-			
-			pdf_start = time.time()
 			pdf = PDFGenerator(pdf_payload, "estimation_report.pdf")
 			pdf.generate_pdf()
-			pdf_time = time.time() - pdf_start
-			print(f"[TIME] PDF generation: {pdf_time:.2f}s")
 			pdf_generated = True
 
-		upgrade_start = time.time()
 		upgrade_suggestions = generate_upgrade_suggestions(
 			breakdown, selected_tier,
 			family_details=family_details,
 			lift_required=lift_required,
 			project_type=engine_project_type
 		)
-		upgrade_suggestions_time = time.time() - upgrade_start
-		print(f"[TIME] Upgrade suggestions: {upgrade_suggestions_time:.2f}s")
 
-		total_time = time.time() - start_time
-		print(f"[DONE] TOTAL TIME: {total_time:.2f}s")
-		print("="*50 + "\n")
+		print(f"[API] Estimate generated in {time.time() - start_time:.2f}s")
 		return {
 			"breakdown": breakdown, 
 			"explanation": explanation, 

@@ -18,7 +18,7 @@ export default function SelectedTierDetail({ onBack, tier, estimateData, selecte
         setTimeout(() => {
             onProceed?.(estimateData);
             setProcessing(false);
-        }, 3500); // 3.5 second delay
+        }, 500); // Reduced from 3500ms
     };
 
     const tierFeatures = {

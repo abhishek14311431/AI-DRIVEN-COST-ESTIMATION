@@ -147,7 +147,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                         setSignature(true);
                         setProjectName(selectedData.client_name || "Abhishek");
                     }
-                }, 500);
+                }, 100);
             } catch (err) {
                 console.error("Estimate Error:", err);
                 setError(`Estimation Error: ${err.message}`);
