@@ -57,6 +57,58 @@ Backend built using domain-specific engines:
 - `UpgradeEngine` – Feature-level upgrade delta calculator
 - `BreakdownEngine` – 14-line item cost aggregation
 - `XAIEngine` – AI explanation generator
+- 
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- Python 3.12
+- FastAPI
+- Pydantic
+- SQLite
+- ReportLab
+- Uvicorn
+
+### Frontend
+- React 18
+- TailwindCSS
+- Framer Motion
+- Lucide Icons
+
+### Deployment
+- Vercel (Serverless)
+- Heroku
+
+---
+
+## 🚀 Installation & Setup
+
+### 1️⃣ Clone Repository
+
+git clone https://github.com/abhishek14311431/AI-DRIVEN-COST-ESTIMATION.git
+cd AI-DRIVEN-COST-ESTIMATION
+
 
 Architecture follows:
+
+AI_DRIVEN_COST/
+│
+├── backend/
+│   ├── main.py
+│   ├── engines/
+│   ├── models/
+│   ├── database/
+│   ├── report/
+│   └── utils/
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   └── components/
+│
+├── api/
+├── vercel.json
+├── requirements.txt
+└── README.md
 
