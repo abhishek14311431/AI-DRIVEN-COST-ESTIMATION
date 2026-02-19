@@ -23,10 +23,10 @@ PLOT_SIZES: dict[str, int] = {
 
 TIER_MULTIPLIER: dict[str, float] = {
     "Basic": 1.00,
-    "Classic": 1.15,
-    "Premium": 1.30,
-    "Luxury": 1.45,
-    "Luxury Plus": 1.60,
+    "Classic": 1.18,
+    "Premium": 1.35,
+    "Luxury": 1.55,
+    "Luxury Plus": 1.75,
 }
 
 

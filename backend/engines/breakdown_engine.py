@@ -95,12 +95,17 @@ class BreakdownEngine:
         structure_cost = self.base_result["structure_cost"]
         inflation_rate = self.base_result["inflation_rate"]
         
-        tier_engine = TierEngine(base_finish_cost, total_area, self.selected_tier)
+        base_total_for_tier = structure_cost + base_finish_cost
+        tier_engine = TierEngine(base_total_for_tier, total_area, self.selected_tier)
         tier_result = tier_engine.apply_tier_upgrade()
         
-        upgraded_finish_cost = tier_result["upgraded_finish_cost"]
+        # The upgraded values now reflect the total project scale
         tier_multiplier = tier_result["tier_multiplier"]
         upgrade_difference = tier_result["upgrade_difference"]
+        
+        # For the finish breakdown, we still want to show how much the finish part alone costs
+        # by applying the multiplier to the base finish.
+        upgraded_finish_cost = base_finish_cost * tier_multiplier
         
         upgrades_cost = self.calculate_upgrades_cost(total_area)
         interior_cost = self.calculate_interior_cost(total_area)
@@ -114,7 +119,7 @@ class BreakdownEngine:
         if rwh_req:
             extra_addons_cost += FIXED_COSTS["rain_water_harvesting"]
 
-        subtotal_before_zone = structure_cost + upgraded_finish_cost + upgrades_cost + interior_cost + extra_addons_cost
+        subtotal_before_zone = structure_cost + base_finish_cost + upgrade_difference + upgrades_cost + interior_cost + extra_addons_cost
         
         fixed_costs_total = 0
         for key in self.FIXED_COST_KEYS:
@@ -133,7 +138,7 @@ class BreakdownEngine:
 
         detailed_breakdown = []
 
-        structure_actual_total = structure_cost
+        structure_actual_total = structure_cost * tier_multiplier
 
         structure_items = list(STRUCTURE_BREAKDOWN.items())
         structure_allocated = 0
