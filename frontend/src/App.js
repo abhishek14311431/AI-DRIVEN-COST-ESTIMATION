@@ -15,6 +15,7 @@ import EstimateScreen from './components/EstimateScreen';
 import DetailedBreakdownScreen from './components/DetailedBreakdownScreen';
 import SelectedTierDetail from './components/SelectedTierDetail';
 import AnalysisLoadingScreen from './components/AnalysisLoadingScreen';
+import { API_BASE_URL } from './services/api';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('greeting');
