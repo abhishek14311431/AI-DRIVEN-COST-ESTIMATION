@@ -101,7 +101,8 @@ class BreakdownEngine:
         
         # The upgraded values now reflect the total project scale
         tier_multiplier = tier_result["tier_multiplier"]
-        upgrade_difference = tier_result["upgrade_difference"]
+        # DEBUG SMOKE TEST - HARDCODED VALUE
+        upgrade_difference = 9999999 if self.selected_tier == "Classic" else tier_result["upgrade_difference"]
         
         # For the finish breakdown, we still want to show how much the finish part alone costs
         # by applying the multiplier to the base finish.
