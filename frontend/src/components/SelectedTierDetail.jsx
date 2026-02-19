@@ -2,14 +2,35 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, Sparkles, Calculator, Award, Loader2 } from 'lucide-react';
 
-export default function SelectedTierDetail({ onBack, tier, estimateData, selectedData, onProceed }) {
+export default function SelectedTierDetail({ onBack, tier, estimateData, baseEstimateData, selectedData, onProceed }) {
     const [processing, setProcessing] = useState(false);
-    const [excludedFeatures, setExcludedFeatures] = useState(new Set());
+
+    // Initialize excludedFeatures based on the provided estimateData
+    const [excludedFeatures, setExcludedFeatures] = useState(() => {
+        const activeIds = new Set(estimateData?.breakdown?.active_upgrade_features?.map(f => f.id) || []);
+
+        // If we have active features (meaning we're returning from a previous finalization),
+        // we figure out which ones from this tier were excluded.
+        if (activeIds.size > 0) {
+            const currentTierFeatures = tierFeatures[tier] || [];
+            const excluded = new Set();
+            currentTierFeatures.forEach(f => {
+                if (!activeIds.has(f.id)) {
+                    excluded.add(f.id);
+                }
+            });
+            return excluded;
+        }
+        return new Set();
+    });
+
     const [saved, setSaved] = useState(false);
 
-    const baseTotal = Number(estimateData?.breakdown?.total_cost || 0);
-    const suggestion = estimateData?.upgrade_suggestions?.find(s => s.tier === tier);
-    const initialUpgradeCost = suggestion?.upgrade_cost || 0;
+    const baseTotal = Number(baseEstimateData?.breakdown?.total_cost || 0);
+    const upgradedTotalFromBackend = Number(estimateData?.breakdown?.total_cost || 0);
+
+    // The "honest" upgrade cost is the delta between the two backend estimates
+    const initialUpgradeCost = upgradedTotalFromBackend - baseTotal;
 
     const tierFeatures = {
         "Classic": [
@@ -80,7 +101,7 @@ export default function SelectedTierDetail({ onBack, tier, estimateData, selecte
 
     const currentFeatures = tierFeatures[tier] || [];
 
-    // Calculate dynamic costs
+    // Calculate dynamic costs based on weights
     const currentUpgradeCost = currentFeatures.reduce((acc, feat) => {
         if (excludedFeatures.has(feat.id)) return acc;
         return acc + (initialUpgradeCost * feat.weight);

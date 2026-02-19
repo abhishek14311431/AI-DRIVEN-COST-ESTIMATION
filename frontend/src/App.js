@@ -274,13 +274,10 @@ function App() {
             setCurrentScreen('estimate');
           }}
           tier={selectedUpgradeTier}
+          baseEstimateData={estimateData}
           estimateData={provisionalEstimate || estimateData}
-          selectedData={selectedData}
           onProceed={(newEstimateOutput) => {
             console.log('Finalizing Upgrade To:', selectedUpgradeTier);
-            // We pass the new estimate output directly to order-summary
-            // WITHOUT updating the app-level state yet.
-            // This prevents "backwards traversal" price increases.
             setCurrentScreen('order-summary');
             setProvisionalEstimate(newEstimateOutput);
           }}
@@ -291,12 +288,8 @@ function App() {
         <OrderSummaryScreen
           key="order-summary"
           onBack={() => {
-            // Explicitly reset any provisional selections if the user goes back
-            setProvisionalEstimate(null);
-            setSelectedUpgradeTier('Base');
-
-            // Revert back to the estimate screen
-            setCurrentScreen('estimate');
+            // Traverse back to upgrade detail page instead of home
+            setCurrentScreen('tier-detail');
           }}
           estimateData={provisionalEstimate || estimateData} // Use provisional data if available
           selectedData={selectedData}
