@@ -42,7 +42,7 @@ export default function SelectedTierDetail({ onBack, tier, estimateData, baseEst
             { id: 'c6', category: "Kitchen", item: "Granite Platform", detail: "Black galaxy granite counter with stainless steel sink.", weight: 0.075 },
             { id: 'c7', category: "Windows", item: "UPVC Windows", detail: "High-quality UPVC windows with mosquito mesh & safety grills.", weight: 0.075 },
             { id: 'c8', category: "Plumbing", item: "CPVC/UPVC Piping", detail: "Astral/Ashirvad concealed piping for long-lasting durability.", weight: 0.075 },
-            { id: 'c9', category: "Painting", item: "Premium Emulsion", detail: "High-sheen washable emulsion for all internal walls.", weight: 0.005 } // Adjusting one to sum to 1.0 (0.4 + 0.075*7 + 0.075 = 1.0)
+            { id: 'c9', category: "Painting", item: "Premium Emulsion", detail: "High-sheen washable emulsion for all internal walls.", weight: 0.075 } // Corrected weight to sum to 1.0
             // Correction: 0.4 + 0.075*8 = 1.0. Perfect.
         ],
         "Premium": [

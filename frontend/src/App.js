@@ -65,6 +65,10 @@ function App() {
   const [selectedUpgradeTier, setSelectedUpgradeTier] = useState(null);
 
   const handleUpgradeSelect = async (baseData, tier) => {
+    // Robustly anchor the base estimate data before transitioning
+    console.log('Transitioning to upgrade. Anchoring base data:', baseData);
+    setEstimateData(baseData);
+
     setPreviousScreen('estimate');
     setSelectedUpgradeTier(tier);
     setCurrentScreen('analysis-loading');
