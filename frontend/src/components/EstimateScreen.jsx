@@ -185,12 +185,13 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                 plan: selectedData.plan || 'Classic',
                 answers: selectedData.answers || {},
                 upgrades: selectedData.upgrades || {},
+                active_upgrade_features: estimateData?.breakdown?.active_upgrade_features || [],
                 interior: selectedData.interior || null,
                 additionalRequirements: selectedData.additionalRequirements || {},
                 breakdown: estimateData?.breakdown || {},
                 explanation: estimateData?.explanation || {},
                 total_cost: isReadOnly ? (selectedData.total_cost || estimateData?.breakdown?.total_cost) : (estimateData?.breakdown?.total_cost || 0),
-                upgrades_cost: isReadOnly ? (selectedData.upgrades_cost || 0) : 0,
+                upgrades_cost: isReadOnly ? (selectedData.upgrades_cost || estimateData?.breakdown?.upgrades_cost || 0) : (estimateData?.breakdown?.upgrades_cost || 0),
                 signature: signatureImage || (isReadOnly ? selectedData.signature : null),
                 project_id: isReadOnly ? (selectedData.project_id || `AI-PNR-2026-${Date.now().toString().slice(-6)}`) : `AI-PNR-2026-${Date.now().toString().slice(-6)}`,
                 generated_at: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
@@ -409,16 +410,20 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.1 }} // Reduced from 0.3s
+                        transition={{ delay: 0.1 }}
                         className="relative"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-2xl" />
                         <div className="relative p-10 rounded-3xl bg-gradient-to-br from-blue-500/[0.05] via-purple-500/[0.05] to-pink-500/[0.05] border-2 border-white/10 backdrop-blur-3xl text-center">
-                            <p className="text-white/50 text-sm mb-3 uppercase tracking-widest font-bold">Total Investment</p>
+                            <p className="text-white/50 text-sm mb-3 uppercase tracking-widest font-bold">
+                                {isReadOnly ? "Saved Total Investment" : "Total Investment"}
+                            </p>
                             <h2 className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-4">
-                                <AnimatedCounter value={baseCost} delay={400} />
+                                <AnimatedCounter value={isReadOnly ? (selectedData.total_cost || baseCost) : baseCost} delay={400} />
                             </h2>
-                            <p className="text-white/40 text-sm">Complete construction estimate</p>
+                            <p className="text-white/40 text-sm">
+                                {isReadOnly ? `Finalized Audit for ${selectedData.client_name || projectName}` : "Complete construction estimate"}
+                            </p>
                         </div>
                     </motion.div>
                 )}
@@ -491,7 +496,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                                     </div>
                                 </motion.div>
 
-                                {wantsUpgrade === false && (
+                                {(wantsUpgrade === false || isReadOnly) && (
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -502,7 +507,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                                                 <div className="flex items-center gap-2 text-green-400">
                                                     <PenTool className="w-6 h-6" />
                                                     <span className="font-black uppercase tracking-widest text-sm">
-                                                        {isReadOnly ? `Digitally Signed by ${projectName}` : 'Digital Authorization'}
+                                                        {isReadOnly ? `Digitally Signed by ${selectedData.client_name || projectName}` : 'Digital Authorization'}
                                                     </span>
                                                 </div>
                                                 {!isReadOnly && (
@@ -534,7 +539,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                                                 onTouchMove={!isReadOnly ? draw : undefined}
                                                 onTouchEnd={!isReadOnly ? stopDrawing : undefined}
                                             />
-                                            {!signature && (
+                                            {(!signature && !selectedData?.signature) && (
                                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
                                                     <p className="text-black font-black uppercase tracking-[0.4em] text-lg">Sign Here</p>
                                                 </div>
@@ -556,70 +561,93 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                                     <div className="flex items-center gap-3 mb-6">
                                         <Sparkles className="w-6 h-6 text-cyan-400" />
                                         <h3 className="text-2xl font-black">
-                                            {isReadOnly ? 'Project Finalized' : 'Smart Upgrades'}
+                                            {isReadOnly ? 'Applied Upgrade Features' : 'Smart Upgrades'}
                                         </h3>
                                     </div>
-                                    <p className="text-white/60 text-base mb-8 leading-relaxed">
-                                        {isReadOnly
-                                            ? 'This project has been finalized and locked. No further changes can be made to the specifications or estimation.'
-                                            : 'Upgrade costs tailored to your project — based onbedrooms, family size, and lift.'}
-                                    </p>
 
-                                    {!isReadOnly && (
-                                        <div className="flex gap-4 mb-8">
-                                            <motion.button
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => setWantsUpgrade(true)}
-                                                className={`flex-1 px-8 py-5 rounded-2xl font-black text-xl transition-all border ${wantsUpgrade === true
-                                                    ? 'bg-blue-500/20 border-blue-500/50 text-blue-400'
-                                                    : 'bg-white/[0.02] border-white/10 text-white/50 hover:bg-white/[0.05] hover:border-white/20'
-                                                    }`}
-                                            >
-                                                YES
-                                            </motion.button>
-                                            <motion.button
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => setWantsUpgrade(false)}
-                                                className={`flex-1 px-8 py-5 rounded-2xl font-black text-xl transition-all border ${wantsUpgrade === false
-                                                    ? 'bg-green-500/20 border-green-500/50 text-green-400 shadow-lg shadow-green-500/10'
-                                                    : 'bg-white/[0.02] border-white/10 text-white/50 hover:bg-white/[0.05] hover:border-white/20'
-                                                    }`}
-                                            >
-                                                NO (Finalize Estimate)
-                                            </motion.button>
-                                        </div>
-                                    )}
-
-                                    {!isReadOnly && wantsUpgrade === true && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="space-y-4"
-                                        >
-                                            {upgradeSuggestions.map((upgrade, i) => (
+                                    {isReadOnly ? (
+                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                                            {(selectedData?.active_upgrade_features || estimateData?.breakdown?.active_upgrade_features || []).map((feat, idx) => (
                                                 <motion.div
-                                                    key={i}
+                                                    key={idx}
                                                     initial={{ opacity: 0, x: 20 }}
                                                     animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: i * 0.1 }}
-                                                    whileHover={{ scale: 1.02, x: 5 }}
-                                                    className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-cyan-400/30 hover:bg-white/[0.04] cursor-pointer transition-all"
-                                                    onClick={() => onUpgradeSelect(estimateData, upgrade.tier)}
+                                                    transition={{ delay: 1.2 + idx * 0.05 }}
+                                                    className="p-4 rounded-xl bg-white/[0.05] border border-white/10"
                                                 >
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <h4 className="text-xl font-black text-white">{upgrade.tier}</h4>
-                                                        <p className="text-base font-bold text-cyan-400">+₹{upgrade.upgrade_cost.toLocaleString('en-IN')}</p>
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">{feat.category}</span>
+                                                        <CheckCircle className="w-4 h-4 text-cyan-400" />
                                                     </div>
-                                                    <p className="text-sm text-white/50 leading-relaxed">{upgrade.description}</p>
+                                                    <p className="text-base font-bold text-white uppercase">{feat.item}</p>
+                                                    <p className="text-[10px] text-white/40 font-medium uppercase tracking-tight mt-1 leading-relaxed">{feat.detail}</p>
                                                 </motion.div>
                                             ))}
-                                        </motion.div>
+                                            {!(selectedData?.active_upgrade_features?.length || estimateData?.breakdown?.active_upgrade_features?.length) && (
+                                                <p className="text-white/30 text-center py-8 font-black uppercase tracking-widest">Base Project (No Upgrades Applied)</p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <p className="text-white/60 text-base mb-8 leading-relaxed">
+                                                Upgrade costs tailored to your project — based on bedrooms, family size, and lift.
+                                            </p>
+
+                                            <div className="flex gap-4 mb-8">
+                                                <motion.button
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => setWantsUpgrade(true)}
+                                                    className={`flex-1 px-8 py-5 rounded-2xl font-black text-xl transition-all border ${wantsUpgrade === true
+                                                        ? 'bg-blue-500/20 border-blue-500/50 text-blue-400'
+                                                        : 'bg-white/[0.02] border-white/10 text-white/50 hover:bg-white/[0.05] hover:border-white/20'
+                                                        }`}
+                                                >
+                                                    YES
+                                                </motion.button>
+                                                <motion.button
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => setWantsUpgrade(false)}
+                                                    className={`flex-1 px-8 py-5 rounded-2xl font-black text-xl transition-all border ${wantsUpgrade === false
+                                                        ? 'bg-green-500/20 border-green-500/50 text-green-400 shadow-lg shadow-green-500/10'
+                                                        : 'bg-white/[0.02] border-white/10 text-white/50 hover:bg-white/[0.05] hover:border-white/20'
+                                                        }`}
+                                                >
+                                                    NO (Finalize Estimate)
+                                                </motion.button>
+                                            </div>
+
+                                            {wantsUpgrade === true && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="space-y-4"
+                                                >
+                                                    {upgradeSuggestions.map((upgrade, i) => (
+                                                        <motion.div
+                                                            key={i}
+                                                            initial={{ opacity: 0, x: 20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: i * 0.1 }}
+                                                            whileHover={{ scale: 1.02, x: 5 }}
+                                                            className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-cyan-400/30 hover:bg-white/[0.04] cursor-pointer transition-all"
+                                                            onClick={() => onUpgradeSelect(estimateData, upgrade.tier)}
+                                                        >
+                                                            <div className="flex items-center justify-between mb-2">
+                                                                <h4 className="text-xl font-black text-white">{upgrade.tier}</h4>
+                                                                <p className="text-base font-bold text-cyan-400">+₹{upgrade.upgrade_cost.toLocaleString('en-IN')}</p>
+                                                            </div>
+                                                            <p className="text-sm text-white/50 leading-relaxed">{upgrade.description}</p>
+                                                        </motion.div>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </>
                                     )}
                                 </motion.div>
 
-                                {wantsUpgrade === false && (
+                                {(wantsUpgrade === false || isReadOnly) && (
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -643,7 +671,7 @@ export default function EstimateScreen({ onBack, selectedData, onUpgradeSelect, 
                                                 ))}
                                             </ul>
                                         </div>
-                                        <label onClick={() => setAgreed(!agreed)} className="flex items-center gap-4 cursor-pointer group p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition-all border border-white/10">
+                                        <label onClick={!isReadOnly ? () => setAgreed(!agreed) : undefined} className={`flex items-center gap-4 cursor-pointer group p-6 rounded-2xl bg-white/5 transition-all border border-white/10 ${!isReadOnly ? 'hover:bg-white/10' : ''}`}>
                                             <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all ${agreed ? 'bg-blue-500 border-blue-500 shadow-lg shadow-blue-500/20' : 'border-white/20'}`}>
                                                 {agreed && <CheckCircle className="w-5 h-5 text-white" />}
                                             </div>

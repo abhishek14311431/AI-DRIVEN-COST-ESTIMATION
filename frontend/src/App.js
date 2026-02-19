@@ -29,6 +29,7 @@ function App() {
   const [customLength, setCustomLength] = useState('');
   const [customWidth, setCustomWidth] = useState('');
   const [showDimensions, setShowDimensions] = useState(false);
+  const [provisionalEstimate, setProvisionalEstimate] = useState(null);
 
   const handleAdditionalQuestions = (data) => {
     setSelectedData(data);
@@ -87,6 +88,7 @@ function App() {
       total_cost: project.total_cost,
       breakdown: project.breakdown,
       explanation: project.explanation,
+      active_upgrade_features: project.active_upgrade_features,
       project_id: project.project_id
     };
 
@@ -106,6 +108,7 @@ function App() {
     setCustomLength('');
     setCustomWidth('');
     setShowDimensions(false);
+    setProvisionalEstimate(null);
     setCurrentScreen('greeting');
   };
 
@@ -270,20 +273,11 @@ function App() {
           selectedData={selectedData}
           onProceed={(newEstimateOutput) => {
             console.log('Finalizing Upgrade To:', selectedUpgradeTier);
-
-            setEstimateData(newEstimateOutput);
-            setSelectedData(prev => ({
-              ...prev,
-              plan: selectedUpgradeTier,
-              // We keep the custom upgrades, but backend logic now subtracts overlaps
-              // The total cost and breakdown are now sourced from the new estimate
-              total_cost: newEstimateOutput?.breakdown?.total_cost || prev.total_cost,
-              upgrades_cost: newEstimateOutput?.breakdown?.upgrades_cost || 0,
-              breakdown: newEstimateOutput?.breakdown,
-              explanation: newEstimateOutput?.explanation
-            }));
-
+            // We pass the new estimate output directly to order-summary
+            // WITHOUT updating the app-level state yet.
+            // This prevents "backwards traversal" price increases.
             setCurrentScreen('order-summary');
+            setProvisionalEstimate(newEstimateOutput);
           }}
         />
       )}
@@ -298,11 +292,23 @@ function App() {
               setCurrentScreen('tier-detail');
             }
           }}
-          estimateData={estimateData} // Pass the estimateData state directly
-          selectedData={selectedData} // Pass selectedData for context (plot size, etc)
-          selectedTier={selectedData?.plan || selectedUpgradeTier || 'Base'}
-          upgradeCost={selectedData?.upgrades_cost || 0}
+          estimateData={provisionalEstimate || estimateData} // Use provisional data if available
+          selectedData={selectedData}
+          selectedTier={provisionalEstimate?.selected_tier || selectedData?.plan || selectedUpgradeTier || 'Base'}
+          upgradeCost={provisionalEstimate?.upgrades_cost || selectedData?.upgrades_cost || 0}
           onSave={() => {
+            // Commit the provisional data only when saved
+            if (provisionalEstimate) {
+              setEstimateData(provisionalEstimate);
+              setSelectedData(prev => ({
+                ...prev,
+                plan: provisionalEstimate.selected_tier,
+                total_cost: provisionalEstimate.total_cost,
+                upgrades_cost: provisionalEstimate.upgrades_cost,
+                breakdown: provisionalEstimate.breakdown,
+                explanation: provisionalEstimate.explanation
+              }));
+            }
             setCurrentScreen('saved');
           }}
         />

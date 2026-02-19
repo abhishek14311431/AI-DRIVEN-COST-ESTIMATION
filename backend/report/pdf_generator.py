@@ -19,7 +19,14 @@ class PDFGenerator:
         self.payload = payload
         self.breakdown = payload.get("breakdown", {})
         self.explanation = payload.get("explanation", {})
-        self.upgrades = payload.get("upgrades", {})
+        # Normalize upgrades to a list of features
+        raw_upgrades = payload.get("active_upgrade_features", payload.get("upgrades", []))
+        if isinstance(raw_upgrades, dict):
+            # If it's the raw selection dict, we convert it to displayable items if possible
+            # But usually we expect active_upgrade_features (the list)
+            self.upgrades = []
+        else:
+            self.upgrades = raw_upgrades
         self.output_stream = output_stream
         self.styles = getSampleStyleSheet()
         self._setup_custom_styles()
@@ -137,7 +144,7 @@ class PDFGenerator:
             elements.append(Spacer(1, 0.2 * inch))
 
             # 3. Project Deliverables (Active Upgrades)
-            active_upgrades = self.payload.get("active_upgrade_features", [])
+            active_upgrades = self.upgrades
             if active_upgrades and isinstance(active_upgrades, list):
                 elements.append(Paragraph("03. Customized Project Deliverables", self.styles['SectionHeading']))
                 deliverable_data = [["Deliverable", "Description"]]
@@ -163,9 +170,10 @@ class PDFGenerator:
 
             elements.append(Paragraph("04. Financial Summary", self.styles['SectionHeading']))
             
-            base_cost = self.payload.get("total_cost", 0)
+            # Use total_cost as the final sum. Extract base_cost accordingly.
+            final_total = self.payload.get("total_cost", 0)
             upgrades_cost = self.payload.get("upgrades_cost", 0) or 0
-            final_total = base_cost + upgrades_cost
+            base_cost = self.payload.get("base_cost") or (final_total - upgrades_cost)
 
             summary_data = [
                 ["Base Construction Projection", self._format_currency(base_cost)],
