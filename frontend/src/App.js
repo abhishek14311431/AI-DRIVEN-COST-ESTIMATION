@@ -300,7 +300,7 @@ function App() {
           }}
           estimateData={estimateData} // Pass the estimateData state directly
           selectedData={selectedData} // Pass selectedData for context (plot size, etc)
-          selectedTier={selectedData?.selected_tier || selectedUpgradeTier || 'Base'}
+          selectedTier={selectedData?.plan || selectedUpgradeTier || 'Base'}
           upgradeCost={selectedData?.upgrades_cost || 0}
           onSave={() => {
             setCurrentScreen('saved');

@@ -78,6 +78,9 @@ export default function OrderSummaryScreen({ onBack, onSave, estimateData, selec
         try {
             setSaving(true);
 
+            // Use the total cost from breakdown (which includes upgrades) if available
+            const finalTotalCost = estimateData?.breakdown?.total_cost || totalCost;
+
             const pdfData = {
                 project_type: selectedData.projectType,
                 plot_size: selectedData.dimensions || selectedData.plotSize,
@@ -90,7 +93,10 @@ export default function OrderSummaryScreen({ onBack, onSave, estimateData, selec
                 additionalRequirements: selectedData.additionalRequirements || {},
                 breakdown: estimateData?.breakdown || {},
                 explanation: estimateData?.explanation || {},
-                total_cost: baseCost,
+                // Save the full total cost (base + upgrades)
+                total_cost: finalTotalCost,
+                // Also save base cost separately for reference
+                base_cost: baseCost,
                 upgrades_cost: effectiveUpgradeCost,
                 signature: signature,
                 project_id: `AI-PNR-2026-${Date.now().toString().slice(-6)}`,
