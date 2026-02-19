@@ -267,7 +267,10 @@ function App() {
       {currentScreen === 'tier-detail' && (
         <SelectedTierDetail
           key="tier-detail"
-          onBack={() => setCurrentScreen('estimate')}
+          onBack={() => {
+            setProvisionalEstimate(null);
+            setCurrentScreen('estimate');
+          }}
           tier={selectedUpgradeTier}
           estimateData={estimateData}
           selectedData={selectedData}
@@ -286,10 +289,17 @@ function App() {
         <OrderSummaryScreen
           key="order-summary"
           onBack={() => {
-            if (selectedUpgradeTier === 'Base') {
+            // Explicitly reset any provisional selections if the user goes back
+            setProvisionalEstimate(null);
+
+            // If the user was trying an upgrade and goes back, 
+            // ensure we revert any temporary plan changes in the UI context
+            if (selectedUpgradeTier !== 'Base') {
+              // CurrentScreen is set back to estimate, which will 
+              // re-render based on the original estimateData/selectedData
               setCurrentScreen('estimate');
             } else {
-              setCurrentScreen('tier-detail');
+              setCurrentScreen('estimate');
             }
           }}
           estimateData={provisionalEstimate || estimateData} // Use provisional data if available
