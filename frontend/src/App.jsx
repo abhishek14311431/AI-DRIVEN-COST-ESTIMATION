@@ -5,7 +5,7 @@ import ProjectSelection from './pages/ProjectSelection';
 import ProjectWizard from './pages/ProjectWizard';
 import EstimationResult from './pages/EstimationResult';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1';
 
 function App() {
   const [view, setView] = useState('dashboard');
@@ -124,6 +124,7 @@ function App() {
       <div id="app">
         <nav className="navbar animate">
           <div className="logo">
+            <img src="/assets/logo.svg" alt="Logo" style={{ height: 60, marginRight: 16 }} />
           </div>
         </nav>
 

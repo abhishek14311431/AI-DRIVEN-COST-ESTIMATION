@@ -37,7 +37,7 @@ const Dashboard = ({ setView }) => {
             <div className="liquid-glass-panel">
                 <div className="hero-text" style={{ padding: 0, flex: 1 }}>
                     <div style={{ marginBottom: '3rem', animation: 'fadeInDown 1s ease' }}>
-                        <img src="/logo.svg" alt="App Logo" style={{ width: '120px', height: '120px', filter: 'drop-shadow(0 0 20px rgba(253, 185, 49, 0.4))' }} />
+                        <img src="/assets/logo.svg" alt="App Logo" style={{ width: '120px', height: '120px', filter: 'drop-shadow(0 0 20px rgba(253, 185, 49, 0.4))' }} />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1rem' }}>
                         <div className="greeting-label" style={{ margin: 0 }}>{getGreeting()},</div>

@@ -1,0 +1,32 @@
+﻿<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Crown -->
+  <g filter="url(#glow)">
+    <path d="M 300 500 L 250 300 L 350 200 L 400 250 L 480 150 L 560 250 L 610 200 L 710 300 L 660 500" fill="none" stroke="#D4AF37" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="480" cy="180" r="25" fill="#D4AF37"/>
+    <path d="M 400 250 Q 380 280 390 320" fill="none" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 560 250 Q 580 280 570 320" fill="none" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- Elegant Script L -->
+  <g filter="url(#glow)">
+    <path d="M 520 350 Q 540 420 560 550 Q 565 620 540 680" fill="none" stroke="#D4AF37" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 540 680 L 620 680" stroke="#D4AF37" stroke-width="12" stroke-linecap="round"/>
+    <!-- Decorative flourish -->
+    <path d="M 560 550 Q 600 560 630 530" fill="none" stroke="#D4AF37" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <!-- Sparkles -->
+  <circle cx="250" cy="350" r="3" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="280" cy="280" r="2" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="650" cy="350" r="3" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="680" cy="280" r="2" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="300" cy="450" r="2" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="660" cy="450" r="2" fill="#D4AF37" opacity="0.4"/>
+</svg>

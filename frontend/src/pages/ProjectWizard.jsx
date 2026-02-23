@@ -256,7 +256,7 @@ const SignaturePad = ({ onSave, onClear }) => {
 };
 
 const ProjectWizard = ({ projectType, step, inputs, setInputs, setView, handleNext }) => {
-    const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1';
     const [estData, setEstData] = useState(null);
     const [loadingEst, setLoadingEst] = useState(false);
     const [displayTotal, setDisplayTotal] = useState(0);

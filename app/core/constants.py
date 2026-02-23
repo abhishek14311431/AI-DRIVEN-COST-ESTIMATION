@@ -125,8 +125,9 @@ BASE_BREAKDOWN_RATIOS = {
 ZONE_MULTIPLIER = { "A": 1.10, "B": 1.05, "C": 1.00 }
 LIFT_COST = 1000000
 OWN_HOUSE_INTERIOR_COSTS = {
-    "G+1": { "None": 0, "Base": 400000, "Semi": 800000, "Full": 1200000 },
-    "G+2": { "None": 0, "Base": 600000, "Semi": 1200000, "Full": 1900000 }
+    "G+1": { "none": 0, "base": 350000, "semi": 750000, "full": 1150000 },
+    "G+2": { "none": 0, "base": 500000, "semi": 1000000, "full": 1600000 },
+    "G+3": { "none": 0, "base": 650000, "semi": 1300000, "full": 2000000 }
 }
 
 # --- Rental Parameters ---
