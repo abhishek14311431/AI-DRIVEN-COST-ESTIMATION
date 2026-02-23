@@ -21,6 +21,10 @@ class OwnHouseEngine:
         
         try:
             result = BreakdownEngine.calculate_smart_breakdown(data)
-            return result
+            return {
+                'project_summary': result.get('summary', {}),
+                'total_cost': result.get('total_cost', 0),
+                'breakdown': result.get('breakdown', [])
+            }
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
