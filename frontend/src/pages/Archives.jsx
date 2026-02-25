@@ -26,12 +26,15 @@ const Archives = ({ setView, API_BASE_URL }) => {
 
     useEffect(() => {
         loadProjects();
-    }, []);
+    }, [API_BASE_URL]);
 
     const loadProjects = async () => {
         setLoading(true);
         try {
             const res = await fetch(`${API_BASE_URL}/projects/`);
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status}`);
+            }
             const data = await res.json();
             const sortedData = Array.isArray(data) ? data.sort((a, b) => {
                 const dateA = new Date(a.created_at || 0).getTime();
@@ -39,10 +42,10 @@ const Archives = ({ setView, API_BASE_URL }) => {
                 return dateA - dateB;
             }) : [];
             setProjects(sortedData);
+            setLoading(false);
         } catch (e) {
             console.error('Failed to load projects:', e);
             setProjects([]);
-        } finally {
             setLoading(false);
         }
     };
@@ -165,7 +168,7 @@ const Archives = ({ setView, API_BASE_URL }) => {
     return (
         <div>
             {selectedProject ? (
-                // VALUATION PAGE VIEW
+                // VALUATION PAGE VIEW - EstimationResult Style Layout
                 <div style={{
                     minHeight: '100vh', width: '100%', color: '#fff',
                     fontFamily: "'Outfit', sans-serif", overflowX: 'hidden',
@@ -199,11 +202,51 @@ const Archives = ({ setView, API_BASE_URL }) => {
 
                     {/* Scrollable Content */}
                     <div style={{ position: 'relative', zIndex: 10, width: '100%' }}>
-                        <section style={{
-                            padding: '3rem 2rem', maxWidth: '1200px', margin: '0 auto'
-                        }}>
-                            {/* Header */}
-                            <div style={{ marginBottom: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                        <section style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+                            {/* Header with Logo */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '2rem',
+                                left: '2rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '1rem',
+                                zIndex: 100
+                            }}>
+                                <div style={{
+                                    width: '56px',
+                                    height: '56px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: 'linear-gradient(135deg, rgba(0,242,255,0.15), rgba(124,58,237,0.15))',
+                                    border: '2px solid rgba(0,242,255,0.3)',
+                                    borderRadius: '12px',
+                                    padding: '0.7rem',
+                                    boxShadow: '0 8px 25px rgba(0,242,255,0.15)'
+                                }}>
+                                    <AnimatedConstructionLogo />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                                    <div style={{
+                                        fontSize: '0.85rem',
+                                        fontWeight: 900,
+                                        letterSpacing: '1.5px',
+                                        color: '#00f2ff',
+                                        textTransform: 'uppercase'
+                                    }}>AI Builder</div>
+                                    <div style={{
+                                        fontSize: '0.6rem',
+                                        fontWeight: 700,
+                                        letterSpacing: '1px',
+                                        color: 'rgba(0,242,255,0.5)',
+                                        textTransform: 'uppercase'
+                                    }}>Est. 2026</div>
+                                </div>
+                            </div>
+
+                            {/* Main Title Section */}
+                            <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '4rem' }}>
                                 <div>
                                     <button onClick={() => setSelectedProject(null)} style={{
                                         background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)',
@@ -214,24 +257,20 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
                                         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
                                     >← BACK</button>
-                                    <h2 style={{ fontSize: '4.5rem', fontWeight: 900, margin: 0, letterSpacing: '-3px', color: '#fff', textTransform: 'uppercase' }}>VALUATION</h2>
+                                    <h2 style={{ fontSize: '4.5rem', fontWeight: 900, margin: 0, letterSpacing: '-3px', color: '#fff' }}>VALUATION</h2>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     <div style={{ fontSize: '0.8rem', letterSpacing: '4px', color: 'rgba(255,255,255,0.4)', marginBottom: '0.5rem', fontWeight: 700, textTransform: 'uppercase' }}>
                                         ARCHIVE ID
                                     </div>
-                                    <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#67E8F9' }}>
+                                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#67E8F9' }}>
                                         {selectedProject.id || 'ARCHIVE-' + new Date().getTime()}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Cost Hero */}
-                            <div style={{
-                                padding: '4rem', marginBottom: '3rem', textAlign: 'center',
-                                background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '32px'
-                            }}>
+                            {/* Liquid Glass Panel with Cost */}
+                            <div style={{ padding: '4rem', marginBottom: '3rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '32px' }}>
                                 <p style={{ fontSize: '0.9rem', letterSpacing: '6px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: '1.5rem', fontWeight: 900 }}>
                                     Total Estimated Investment
                                 </p>
@@ -242,12 +281,21 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                 }}>
                                     ₹{(selectedProject.total_cost || 0).toLocaleString('en-IN')}
                                 </div>
-                                <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.5)', fontWeight: 700 }}>
-                                    PRECISION AI VALUATION · 2026 LIVE
-                                </div>
+                                <button onClick={() => setSelectedProject(null)} style={{
+                                    background: 'linear-gradient(135deg, #00f2ff, #67E8F9)', border: 'none',
+                                    padding: '1.2rem 3rem', borderRadius: '12px', cursor: 'pointer',
+                                    color: '#000', fontSize: '1.1rem', fontWeight: 900, transition: 'all 0.25s',
+                                    marginTop: '2rem', fontFamily: "'Outfit', sans-serif", textTransform: 'uppercase',
+                                    letterSpacing: '1.5px', boxShadow: '0 8px 25px rgba(0,242,255,0.2)'
+                                }}
+                                    onMouseEnter={e => e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,242,255,0.4)'}
+                                    onMouseLeave={e => e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,242,255,0.2)'}
+                                >
+                                    VIEW IN WIZARD
+                                </button>
                             </div>
 
-                            {/* Cost Breakdown */}
+                            {/* Cost Breakdown Grid */}
                             {selectedProject.breakdown_json && (
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
                                     {(selectedProject.breakdown_json.items || selectedProject.breakdown_json).map((item, idx) => (
@@ -270,97 +318,7 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                 </div>
                             )}
 
-                            {/* Market Analysis & Key Metrics */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px', marginBottom: '3rem' }}>
-                                <div style={{ padding: '40px', background: 'rgba(255,255,255,0)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                                        <div style={{ color: '#67E8F9', fontSize: '20px' }}>📈</div>
-                                        <h3 style={{ fontSize: '18px', fontWeight: 900, margin: 0, color: '#fff' }}>Market Analysis</h3>
-                                    </div>
-                                    <div style={{ padding: '24px', borderRadius: '16px', background: 'rgba(103,232,249,0.03)', border: '1px solid rgba(103,232,249,0.1)' }}>
-                                        <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, margin: 0 }}>
-                                            Based on deep analysis of <strong style={{ color: '#67E8F9' }}>2026 market dynamics</strong>, this valuation represents the most accurate competitive estimate for your project. Benchmarked against Tier-1 city construction indices ensuring maximum cost-efficiency.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div style={{ padding: '40px', background: 'rgba(255,255,255,0)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                                        <div style={{ color: '#FCD34D', fontSize: '20px' }}>⚡</div>
-                                        <h3 style={{ fontSize: '18px', fontWeight: 900, margin: 0, color: '#fff' }}>Key Metrics</h3>
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                        {selectedProject.input_json && (
-                                            <>
-                                                <div style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: '4px', textTransform: 'uppercase' }}>Plot Size</div>
-                                                    <div style={{ fontSize: '18px', fontWeight: 900, color: '#67E8F9' }}>{selectedProject.input_json.plot_size} sq ft</div>
-                                                </div>
-                                                <div style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: '4px', textTransform: 'uppercase' }}>Project Type</div>
-                                                    <div style={{ fontSize: '18px', fontWeight: 900, color: '#20E3B2' }}>{selectedProject.project_type?.replace(/_/g, ' ').toUpperCase()}</div>
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Digital Auth & T&C */}
-                            <div style={{ padding: '40px', background: 'rgba(255,255,255,0)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', marginBottom: '3rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px' }}>
-                                    <div>
-                                        <h3 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '24px', letterSpacing: '0.05em', color: '#fff' }}>DIGITAL AUTHORIZATION</h3>
-                                        {selectedProject.input_json?.client_name && (
-                                            <div style={{ padding: '24px', borderRadius: '16px', background: 'rgba(32,227,178,0.05)', border: '1px solid rgba(32,227,178,0.2)' }}>
-                                                <div style={{ fontSize: '11px', color: '#20E3B2', fontWeight: 800, letterSpacing: '0.1em', marginBottom: '12px', textTransform: 'uppercase' }}>
-                                                    ✓ DIGITALLY AUTHORIZED
-                                                </div>
-                                                <div style={{ fontSize: '14px', color: '#fff', fontWeight: 700, marginBottom: '8px' }}>
-                                                    {selectedProject.input_json.client_name}
-                                                </div>
-                                                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>
-                                                    Signed on {formatDate(selectedProject.created_at)}
-                                                </div>
-                                                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>
-                                                    Status: <strong style={{ color: '#20E3B2' }}>PERMANENT RECORD</strong>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <h3 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '28px', letterSpacing: '0.05em', color: '#fff' }}>TERMS & CONDITIONS</h3>
-                                        <div style={{ padding: '24px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.9', maxHeight: '320px', overflowY: 'auto' }}>
-                                            <div style={{ marginBottom: '14px' }}>1. Valuation indexed to 2026 market benchmarks.</div>
-                                            <div style={{ marginBottom: '14px' }}>2. Final execution costs subject to ±5% variance.</div>
-                                            <div style={{ marginBottom: '14px' }}>3. AI-driven appraisal valid for 30 days.</div>
-                                            <div style={{ marginBottom: '14px' }}>4. Construction delays not covered.</div>
-                                            <div>5. Final cost subject to site inspection.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Immutability */}
-                                <div style={{
-                                    padding: '28px', background: 'rgba(255,193,7,0.1)',
-                                    border: '2px solid rgba(255,193,7,0.5)', borderRadius: '16px', marginTop: '24px'
-                                }}>
-                                    <div style={{ display: 'flex', gap: '16px', alignItems: 'start' }}>
-                                        <div style={{ fontSize: '28px', marginTop: '0px', flexShrink: 0 }}>⚠️</div>
-                                        <div>
-                                            <div style={{ fontSize: '16px', fontWeight: 900, color: '#FCD34D', marginBottom: '10px' }}>
-                                                IMMUTABLE & PERMANENT RECORD
-                                            </div>
-                                            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.75)', lineHeight: '1.8' }}>
-                                                This estimation has been digitally signed and permanently archived. <strong>No changes can be made after authorization.</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div style={{ height: '4rem' }} />
-                            </div>
+                            <div style={{ height: '4rem' }} />
                         </section>
                     </div>
                 </div>
@@ -377,11 +335,11 @@ const Archives = ({ setView, API_BASE_URL }) => {
                         position: 'fixed', inset: 0, zIndex: -2,
                         backgroundImage: 'url(https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=2000&q=95)',
                         backgroundSize: 'cover', backgroundPosition: 'center',
-                        opacity: 0.95, filter: 'contrast(1.1) saturate(1.1) brightness(0.7)'
+                        opacity: 0.5, filter: 'contrast(1.1) saturate(1.1) brightness(0.4)'
                     }} />
                     <div style={{
                         position: 'fixed', inset: 0, zIndex: -1,
-                        background: 'radial-gradient(circle at center, transparent 0%, rgba(5,3,10,0.6) 100%)'
+                        background: 'radial-gradient(circle at center, transparent 0%, rgba(5,3,10,0.85) 100%)'
                     }} />
 
                     {/* Glow Orbs */}
@@ -420,14 +378,13 @@ const Archives = ({ setView, API_BASE_URL }) => {
                             {!loading && (
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
                                     <StatBox label="Total Projects" value={projects.length} />
-                                    <StatBox label="Total Investment" value={formatCurrency(projects.reduce((sum, p) => sum + (p.total_cost || 0), 0))} />
                                     <StatBox label="Latest Estimate" value={projects.length > 0 ? formatDate(projects[projects.length - 1]?.created_at) : '—'} />
                                 </div>
                             )}
 
                             {/* Table */}
                             <div style={{
-                                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)',
+                                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
                                 borderRadius: '24px', overflow: 'hidden'
                             }}>
                                 {/* Header */}
@@ -455,7 +412,7 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                         <div key={idx} style={{
                                             display: 'grid', gridTemplateColumns: '70px minmax(140px, 1.2fr) minmax(140px, 1.2fr) 180px 130px 150px',
                                             columnGap: '12px', padding: '26px 32px', borderBottom: '1px solid rgba(255,255,255,0.1)',
-                                            alignItems: 'center', background: idx % 2 === 0 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.3)',
+                                            alignItems: 'center', background: idx % 2 === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.5)',
                                             transition: 'all 0.3s ease'
                                         }}
                                             onMouseEnter={e => {
@@ -463,7 +420,7 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                                 e.currentTarget.style.boxShadow = 'inset 0 0 25px rgba(0,242,255,0.1)';
                                             }}
                                             onMouseLeave={e => {
-                                                e.currentTarget.style.background = idx % 2 === 0 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.3)';
+                                                e.currentTarget.style.background = idx % 2 === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.5)';
                                                 e.currentTarget.style.boxShadow = 'none';
                                             }}
                                         >
@@ -529,7 +486,7 @@ const Archives = ({ setView, API_BASE_URL }) => {
 
 const StatBox = ({ label, value }) => (
     <div style={{
-        padding: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)',
+        padding: '24px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
         borderRadius: '16px', textAlign: 'center'
     }}>
         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: '8px', textTransform: 'uppercase' }}>
