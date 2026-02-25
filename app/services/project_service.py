@@ -35,3 +35,12 @@ class ProjectService:
     @staticmethod
     def get_all_projects(db: Session, skip: int = 0, limit: int = 100):
         return db.query(SavedProject).order_by(SavedProject.created_at.desc()).offset(skip).limit(limit).all()
+
+    @staticmethod
+    def delete_project(db: Session, project_id: int):
+        project = db.query(SavedProject).filter(SavedProject.id == project_id).first()
+        if project:
+            db.delete(project)
+            db.commit()
+            return True
+        return False

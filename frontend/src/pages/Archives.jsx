@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const AnimatedConstructionLogo = () => {
     return (
@@ -18,6 +19,14 @@ const Archives = ({ setView, API_BASE_URL }) => {
     const [loading, setLoading] = useState(true);
     const [selectedProject, setSelectedProject] = useState(null);
     const [dateTime, setDateTime] = useState(new Date());
+    const [modalState, setModalState] = useState({
+        isOpen: false,
+        type: 'warning', // 'warning', 'error', 'success'
+        title: '',
+        message: '',
+        isLoading: false,
+        projectToDelete: null
+    });
 
     useEffect(() => {
         const timer = setInterval(() => setDateTime(new Date()), 1000);
@@ -148,21 +157,70 @@ const Archives = ({ setView, API_BASE_URL }) => {
         }
     };
 
-    const handleDeleteProject = async (projectId) => {
-        if (!window.confirm('Are you sure you want to delete this project?')) return;
+    const handleDeleteProject = (projectId) => {
+        setModalState({
+            isOpen: true,
+            type: 'warning',
+            title: 'Delete Project',
+            message: 'Are you sure you want to delete this project? This action cannot be undone.',
+            isLoading: false,
+            projectToDelete: projectId
+        });
+    };
+
+    const handleConfirmDelete = async () => {
+        const projectId = modalState.projectToDelete;
+        
+        setModalState(prev => ({ ...prev, isLoading: true }));
+
         try {
             const res = await fetch(`${API_BASE_URL}/projects/${projectId}`, { method: 'DELETE' });
+            
             if (res.ok) {
-                setProjects(projects.filter((p, idx) => (p.id || idx) !== projectId));
+                setProjects(projects.filter((p) => p.id !== projectId));
                 setSelectedProject(null);
-                alert('Project deleted successfully');
+                
+                // Show success modal
+                setModalState({
+                    isOpen: true,
+                    type: 'success',
+                    title: 'Project Deleted',
+                    message: 'The project has been successfully deleted from archives.',
+                    isLoading: false,
+                    projectToDelete: null
+                });
+
+                // Auto-close success modal after 2 seconds
+                setTimeout(() => {
+                    setModalState(prev => ({ ...prev, isOpen: false }));
+                }, 2000);
             } else {
-                alert('Failed to delete project');
+                throw new Error(`API error: ${res.status}`);
             }
         } catch (err) {
             console.error('Delete error:', err);
-            alert('Error deleting project');
+            
+            // Show error modal
+            setModalState({
+                isOpen: true,
+                type: 'error',
+                title: 'Delete Failed',
+                message: 'Failed to delete the project. Please try again later.',
+                isLoading: false,
+                projectToDelete: null
+            });
         }
+    };
+
+    const handleCancelDelete = () => {
+        setModalState({
+            isOpen: false,
+            type: 'warning',
+            title: '',
+            message: '',
+            isLoading: false,
+            projectToDelete: null
+        });
     };
 
     return (
@@ -269,54 +327,162 @@ const Archives = ({ setView, API_BASE_URL }) => {
                                 </div>
                             </div>
 
-                            {/* Liquid Glass Panel with Cost */}
-                            <div style={{ padding: '4rem', marginBottom: '3rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '32px' }}>
-                                <p style={{ fontSize: '0.9rem', letterSpacing: '6px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: '1.5rem', fontWeight: 900 }}>
-                                    Total Estimated Investment
-                                </p>
-                                <div style={{
-                                    fontSize: '8rem', fontWeight: 1000, letterSpacing: '-6px',
-                                    margin: '1.5rem 0', color: '#fff',
-                                    textShadow: '0 0 60px rgba(103,232,249,0.3)'
-                                }}>
-                                    ₹{(selectedProject.total_cost || 0).toLocaleString('en-IN')}
-                                </div>
-                                <button onClick={() => setSelectedProject(null)} style={{
-                                    background: 'linear-gradient(135deg, #00f2ff, #67E8F9)', border: 'none',
-                                    padding: '1.2rem 3rem', borderRadius: '12px', cursor: 'pointer',
-                                    color: '#000', fontSize: '1.1rem', fontWeight: 900, transition: 'all 0.25s',
-                                    marginTop: '2rem', fontFamily: "'Outfit', sans-serif", textTransform: 'uppercase',
-                                    letterSpacing: '1.5px', boxShadow: '0 8px 25px rgba(0,242,255,0.2)'
-                                }}
-                                    onMouseEnter={e => e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,242,255,0.4)'}
-                                    onMouseLeave={e => e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,242,255,0.2)'}
-                                >
-                                    VIEW IN WIZARD
-                                </button>
-                            </div>
-
-                            {/* Cost Breakdown Grid */}
-                            {selectedProject.breakdown_json && (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-                                    {(selectedProject.breakdown_json.items || selectedProject.breakdown_json).map((item, idx) => (
-                                        <div key={idx} style={{
-                                            padding: '2rem', background: 'rgba(255,255,255,0.02)',
-                                            border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px'
-                                        }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', marginBottom: '1rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                                                <span>{item.category}</span>
-                                                <span style={{ color: '#67E8F9' }}>{item.percentage}%</span>
+                            {/* Your Project & Total Cost Side by Side */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {/* Your Project */}
+                                <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+                                        <span style={{ fontSize: '1.5rem' }}>🏠</span>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0, color: '#fff' }}>Your Project</h3>
+                                    </div>
+                                    {selectedProject.input_json && (
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                            <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                <div style={{ fontSize: '0.65rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>TYPE</div>
+                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{selectedProject.project_type?.replace(/_/g, ' ').toUpperCase() || 'N/A'}</div>
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>
-                                                {item.component}
+                                            <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                <div style={{ fontSize: '0.65rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>PLOT SIZE</div>
+                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{selectedProject.input_json?.plot_size || 'N/A'} sq ft</div>
                                             </div>
-                                            <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#fff' }}>
-                                                ₹{(item.amount || 0).toLocaleString('en-IN')}
+                                            <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                <div style={{ fontSize: '0.65rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>FLOORS</div>
+                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{selectedProject.input_json?.floors || 'N/A'}</div>
+                                            </div>
+                                            <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                <div style={{ fontSize: '0.65rem', fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>QUALITY</div>
+                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{selectedProject.input_json?.quality || 'N/A'}</div>
                                             </div>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            )}
+
+                                {/* Total Construction Cost */}
+                                <div style={{ padding: '2rem', background: 'rgba(32,227,178,0.1)', border: '1px solid rgba(32,227,178,0.3)', borderRadius: '20px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+                                        <span style={{ fontSize: '1.5rem' }}>💰</span>
+                                        <h3 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0, color: '#fff' }}>Total Construction Cost</h3>
+                                    </div>
+                                    <div style={{ fontSize: '2.5rem', fontWeight: 1000, color: '#20E3B2', marginBottom: '0.5rem', letterSpacing: '-1px' }}>
+                                        ₹{(selectedProject.total_cost || 0).toLocaleString('en-IN')}
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
+                                        This estimate includes all construction costs, materials, labor, and market adjustments.
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Complete Cost Breakdown */}
+                            <div style={{ marginBottom: '3rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2rem' }}>
+                                    <span style={{ fontSize: '1.8rem' }}>📋</span>
+                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: '#fff' }}>Complete Cost Breakdown</h3>
+                                </div>
+                                
+                                {selectedProject.breakdown_json && (
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                                        {(selectedProject.breakdown_json.items || selectedProject.breakdown_json).map((item, idx) => (
+                                            <div key={idx} style={{
+                                                padding: '1.5rem', 
+                                                background: 'rgba(255,255,255,0.04)',
+                                                border: '1px solid rgba(255,255,255,0.1)', 
+                                                borderRadius: '16px',
+                                                transition: 'all 0.3s'
+                                            }}
+                                                onMouseEnter={e => {
+                                                    e.currentTarget.style.background = 'rgba(0,242,255,0.08)';
+                                                    e.currentTarget.style.borderColor = 'rgba(0,242,255,0.3)';
+                                                }}
+                                                onMouseLeave={e => {
+                                                    e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+                                                }}
+                                            >
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.8rem' }}>
+                                                    <div>
+                                                        <div style={{ fontSize: '0.7rem', fontWeight: 900, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                                                            {item.category}
+                                                        </div>
+                                                        <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>
+                                                            {item.component}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#67E8F9', background: 'rgba(0,242,255,0.15)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
+                                                        {item.percentage}%
+                                                    </div>
+                                                </div>
+                                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#20E3B2', letterSpacing: '-0.5px' }}>
+                                                    ₹{(item.amount || 0).toLocaleString('en-IN')}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        
+                                        {/* Inflation if available */}
+                                        {selectedProject.breakdown_json.inflation && (
+                                            <div style={{
+                                                padding: '1.5rem', 
+                                                background: 'rgba(255,193,7,0.08)',
+                                                border: '1px solid rgba(255,193,7,0.3)', 
+                                                borderRadius: '16px'
+                                            }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.8rem' }}>
+                                                    <div>
+                                                        <div style={{ fontSize: '0.7rem', fontWeight: 900, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                                                            MARKET ADJUSTMENT
+                                                        </div>
+                                                        <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>
+                                                            Inflation & Market Impact
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ fontSize: '0.8rem', fontWeight: 900, color: '#FCD34D', background: 'rgba(255,193,7,0.2)', padding: '0.4rem 0.8rem', borderRadius: '8px' }}>
+                                                        {((selectedProject.breakdown_json.inflation / selectedProject.total_cost) * 100).toFixed(1)}%
+                                                    </div>
+                                                </div>
+                                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#FCD34D', letterSpacing: '-0.5px' }}>
+                                                    ₹{(selectedProject.breakdown_json.inflation || 0).toLocaleString('en-IN')}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Digital Authorization & T&C */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {/* Digital Authorization */}
+                                <div style={{ padding: '2rem', background: 'rgba(32,227,178,0.08)', border: '1px solid rgba(32,227,178,0.3)', borderRadius: '16px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
+                                        <span style={{ fontSize: '1.3rem' }}>✓</span>
+                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 900, margin: 0, color: '#20E3B2', textTransform: 'uppercase', letterSpacing: '1px' }}>Digital Authorization</h3>
+                                    </div>
+                                    {selectedProject.input_json?.client_name && (
+                                        <div>
+                                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#20E3B2', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.5rem' }}>
+                                                Digitally Authorized By
+                                            </div>
+                                            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', marginBottom: '1rem' }}>
+                                                {selectedProject.input_json.client_name}
+                                            </div>
+                                            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>
+                                                <div style={{ marginBottom: '0.5rem' }}>📅 Signed on {formatDate(selectedProject.created_at)}</div>
+                                                <div>🔐 Status: <strong style={{ color: '#20E3B2' }}>PERMANENT RECORD</strong></div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Terms & Conditions */}
+                                <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px' }}>
+                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 900, margin: '0 0 1.5rem 0', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>Terms & Conditions</h3>
+                                    <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.8' }}>
+                                        <div style={{ marginBottom: '0.8rem' }}>• Valuation indexed to 2026 market benchmarks</div>
+                                        <div style={{ marginBottom: '0.8rem' }}>• Final execution costs subject to ±5% variance</div>
+                                        <div style={{ marginBottom: '0.8rem' }}>• AI-driven appraisal valid for 30 days</div>
+                                        <div style={{ marginBottom: '0.8rem' }}>• Construction delays not covered</div>
+                                        <div>• Final cost subject to site inspection</div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div style={{ height: '4rem' }} />
                         </section>
@@ -480,6 +646,19 @@ const Archives = ({ setView, API_BASE_URL }) => {
                     </div>
                 </div>
             )}
+
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={modalState.isOpen}
+                title={modalState.title}
+                message={modalState.message}
+                type={modalState.type}
+                isLoading={modalState.isLoading}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                confirmText={modalState.type === 'warning' ? 'Delete' : 'Close'}
+                cancelText={modalState.type === 'warning' ? 'Cancel' : 'Close'}
+            />
         </div>
     );
 };

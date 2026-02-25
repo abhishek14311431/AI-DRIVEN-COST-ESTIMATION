@@ -45,3 +45,16 @@ def download_pdf(project_id: int, db: Session = Depends(get_db)):
         filename=os.path.basename(project.pdf_path),
         media_type='application/pdf'
     )
+
+@router.delete("/{project_id}")
+def delete_project(project_id: int, db: Session = Depends(get_db)):
+    project = ProjectService.get_project(db, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    try:
+        ProjectService.delete_project(db, project_id)
+        return {"message": "Project deleted successfully", "project_id": project_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
